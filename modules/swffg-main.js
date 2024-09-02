@@ -176,7 +176,7 @@ Hooks.once("init", async function () {
   /**
    * Register default XP spend notification
    */
-  game.settings.register("starwarsffg", "notifyOnXpSpend", {
+  game.settings.register("genesysk2", "notifyOnXpSpend", {
     name: game.i18n.localize("SWFFG.Settings.Purchase.Notify.Name"),
     hint: game.i18n.localize("SWFFG.Settings.Purchase.Notify.Hint"),
     scope: "world",
@@ -205,7 +205,7 @@ Hooks.once("init", async function () {
   /**
    * Register action to take when a user removes a combatant from combat
    */
-  game.settings.register("starwarsffg", "removeCombatantAction", {
+  game.settings.register("genesysk2", "removeCombatantAction", {
     name: game.i18n.localize("SWFFG.Settings.RemoveCombatantAction.Name"),
     hint: game.i18n.localize("SWFFG.Settings.RemoveCombatantAction.Hint"),
     scope: "world",
@@ -222,7 +222,7 @@ Hooks.once("init", async function () {
   /**
    * Register the max value for characteristics and skills
    */
-  game.settings.register("starwarsffg", "maxAttribute", {
+  game.settings.register("genesysk2", "maxAttribute", {
     name: game.i18n.localize("SWFFG.Settings.maxAttribute.Name"),
     hint: game.i18n.localize("SWFFG.Settings.maxAttribute.Hint"),
     scope: "world",
@@ -230,7 +230,7 @@ Hooks.once("init", async function () {
     default: 7,
     type: Number,
   });
-  game.settings.register("starwarsffg", "maxSkill", {
+  game.settings.register("genesysk2", "maxSkill", {
     name: game.i18n.localize("SWFFG.Settings.maxSkill.Name"),
     hint: game.i18n.localize("SWFFG.Settings.maxSkill.Hint"),
     scope: "world",
@@ -247,7 +247,7 @@ Hooks.once("init", async function () {
     hint: game.i18n.localize("SWFFG.Settings.Purchase.Specialization.Hint"),
     scope: "world",
     config: false,
-    default: "starwarsffg.oggdudespecializations",
+    default: "genesysk2.oggdudespecializations",
     type: String,
   });
   game.settings.register("genesysk2", "signatureAbilityCompendiums", {
@@ -255,7 +255,7 @@ Hooks.once("init", async function () {
     hint: game.i18n.localize("SWFFG.Settings.Purchase.SignatureAbility.Hint"),
     scope: "world",
     config: false,
-    default: "starwarsffg.oggdudesignatureabilities",
+    default: "genesysk2.oggdudesignatureabilities",
     type: String,
   });
   game.settings.register("genesysk2", "forcePowerCompendiums", {
@@ -263,7 +263,7 @@ Hooks.once("init", async function () {
     hint: game.i18n.localize("SWFFG.Settings.Purchase.ForcePower.Hint"),
     scope: "world",
     config: false,
-    default: "starwarsffg.oggdudeforcepowers",
+    default: "genesysk2.oggdudeforcepowers",
     type: String,
   });
   game.settings.register("genesysk2", "talentCompendiums", {
@@ -274,7 +274,7 @@ Hooks.once("init", async function () {
     default: "",
     type: String,
   });
-  game.settings.register("starwarsffg", "useDefense", {
+  game.settings.register("genesysk2", "useDefense", {
     name: game.i18n.localize("SWFFG.Settings.UseDefense.Name"),
     hint: game.i18n.localize("SWFFG.Settings.UseDefense.Hint"),
     scope: "client",

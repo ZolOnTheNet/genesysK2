@@ -3,10 +3,10 @@ import { RollFFG } from "../dice/roll.js"
 async function rollPepDice(numDice, numRisk = 0, cmpText = "") {
     //let roll = await new Roll(`${numDice}dF`).roll();
     let txtRoll = `${numDice}dF`
-    if(numRisk) txtRoll += " "+numRisk+"dr" // ajout des dés de risques
+    if(numRisk) txtRoll += " +"+numRisk+"dr" // ajout des dés de risques
     let roll = await new RollFFG(txtRoll).roll();
-    //let results = roll.dice[0].results.map(r => r.result); ce n'est pas des dés fudge géré en interne
-    let results = roll.dice[0].results.map(r => [0,-1,-1,0,0,1,1][r.result]); //traduction en dé fudge
+    let results = roll.dice[0].results.map(r => r.result); //ce n'est pas des dés fudge géré en interne
+    //let results = roll.dice[0].results.map(r => [0,-1,-1,0,0,1,1][r.result]); //traduction en dé fudge
     console.log("Resultat du dés :", results, roll.dice[0].results.map(r => r.result))
     // Count successes and advantages
     let successes = results.filter(r => r === 1).length;

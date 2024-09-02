@@ -6,7 +6,7 @@ export class GroupManagerLayer extends CanvasLayer {
   }
 
   static get layerOptions() {
-    return mergeObject(super.layerOptions, {
+    return foundry.utils.mergeObject(super.layerOptions, {
       canDragCreate: false,
     });
   }
@@ -60,7 +60,7 @@ export class GroupManager extends FormApplication {
    * @return {Object}   The data provided to the template when rendering the form
    */
   getData() {
-    const players = game.users.contents.filter((u) => (!u.isGM || game.settings.get("starwarsffg", "GMCharactersInGroupManager")) && u.active);
+    const players = game.users.contents.filter((u) => (!u.isGM || game.settings.get("genesysk2", "GMCharactersInGroupManager")) && u.active);
     if (players.length > 0) {
       players.connected = true;
     }

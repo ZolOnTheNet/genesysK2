@@ -7,7 +7,7 @@ import { ModifiersTests } from "./modifiers.test.js";
 export default class FFGFunctionalTests extends FormApplication {
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       id: "functional-test",
       classes: ["starwarsffg"],
       title: "Functional Tests",

@@ -145,15 +145,16 @@ export class RollFFG extends Roll {
           return await term.evaluate({ minimize, maximize }).total;
         } else return term;
       } else {
-        if (term.evaluate) term.evaluate({ minimize, maximize });
-        if(term.constructor.name==='FateDie') { // pas bo, mais traite les DF comme des des Genesys
-          term.ffg = { success: 0, failure: 0, advantage: 0, threat: 0, triumph: 0, despair: 0, light: 0, dark: 0 };
-          term.results.map(r => { switch(r.result){
-              case 1: term.ffg.success++; break;
-              case -1: term.ffg.advantage++;break;
-            }
-          });
-        }
+        if (term.evaluate) await term.evaluate({ minimize, maximize });
+        // plus utile de faire le calcul car les dés ne sont plus FateDie, mais bien intégré PepsDie
+        // if(term.constructor.name==='FateDie' || term.constructor.name==='PepsDie') { // pas bo, mais traite les DF comme des des Genesys
+        //   term.ffg = { success: 0, failure: 0, advantage: 0, threat: 0, triumph: 0, despair: 0, light: 0, dark: 0 };
+        //   term.results.map(r => { switch(r.result){
+        //       case 1: term.ffg.success++; break;
+        //       case -1: term.ffg.advantage++;break;
+        //     }
+        //   });
+        // }
         this.hasFFG = true;
         return 0;
       }

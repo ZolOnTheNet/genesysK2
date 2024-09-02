@@ -7,7 +7,7 @@ import ModifierHelpers from "./helpers/modifiers.js";
 export default class PopoutModifiers extends FormApplication {
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       id: "popout-modifiers",
       classes: ["starwarsffg", "sheet"],
       title: "Pop-out Modifiers",

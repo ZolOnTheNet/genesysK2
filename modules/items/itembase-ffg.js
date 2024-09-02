@@ -28,7 +28,7 @@ export default class ItemBaseFFG extends Item {
         const appId = this?.flags?.genesysk2?.ffgParentApp;
         if (appId) {
           const newData = ui.windows[appId].object;
-          newData.system[this.flags.genesysk2.ffgTempItemType][this.flags.genesysk2.ffgTempItemIndex] = mergeObject(newData.system[this.flags.genesysk2.ffgTempItemType][this.flags.genesysk2.ffgTempItemIndex], this);
+          newData.system[this.flags.genesysk2.ffgTempItemType][this.flags.genesysk2.ffgTempItemIndex] = foundry.utils.mergeObject(newData.system[this.flags.genesysk2.ffgTempItemType][this.flags.genesysk2.ffgTempItemIndex], this);
           await ui.windows[appId].render(true, { action: "ffgUpdate", data: newData });
         }
         return;

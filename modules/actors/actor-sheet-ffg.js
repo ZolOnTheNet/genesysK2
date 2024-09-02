@@ -228,7 +228,7 @@ export class ActorSheetFFG extends ActorSheet {
         data.data.enrichedBio = await TextEditor.enrichHTML(this.actor.system.biography);
         data.data.general.enrichedNotes = await TextEditor.enrichHTML(this.actor.system.general?.notes) || "";
         data.data.general.enrichedFeatures = await TextEditor.enrichHTML(this.actor.system.general?.features) || "";
-        data.maxAttribute = game.settings.get("starwarsffg", "maxAttribute");
+        data.maxAttribute = game.settings.get("genesysk2", "maxAttribute");
         break;
         // OG : modif a cause du data sur mon système : trouver à la copie ne se fait pas correctement !
       // case "minion":
@@ -862,7 +862,7 @@ export class ActorSheetFFG extends ActorSheet {
       const rolesInUse = crewMemberRoles.map(role => role.role);
 
       const content = await renderTemplate(
-        "systems/starwarsffg/templates/dialogs/ffg-crew-change.html",
+        "systems/genesysk2/templates/dialogs/ffg-crew-change.html",
         {
           actor: crew_member,
           roles: registeredRoles,
@@ -1094,8 +1094,8 @@ export class ActorSheetFFG extends ActorSheet {
         return;
       }
       const weaponSkill = weapon.system.skill.value;
-      const crew = await ship.getFlag("starwarsffg", "crew");
-      const skillRoles = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_skill === weaponSkill);
+      const crew = await ship.getFlag("genesysk2", "crew");
+      const skillRoles = game.settings.get("genesysk2", "arrayCrewRoles").filter(role => role.role_skill === weaponSkill);
       // validate the vehicle has a crew and there is a role that matches the weapon skill
       if (!crew || crew.length === 0) {
         CONFIG.logger.warn("Could not find crew for vehicle or could not find relevant skill; presenting default roller");
@@ -1479,7 +1479,7 @@ export class ActorSheetFFG extends ActorSheet {
                 characteristic,
                 groupskill: false,
                 label: name,
-                max: game.settings.get("starwarsffg", "maxSkill"),
+                max: game.settings.get("genesysk2", "maxSkill"),
                 rank: 0,
                 type: group,
                 custom: true,
@@ -2164,7 +2164,7 @@ export class ActorSheetFFG extends ActorSheet {
     // this is the value without items that modify it
     const characteristicCostValue = ModifierHelpers.getBaseValue(this.actor.items, characteristic, "Characteristic") + characteristicCurrentRank;
 
-    if (characteristicValue >= game.settings.get("starwarsffg", "maxAttribute")) {
+    if (characteristicValue >= game.settings.get("genesysk2", "maxAttribute")) {
       ui.notifications.warn(game.i18n.localize("SWFFG.Actors.Sheets.Purchase.Characteristic.Max"));
       return;
     }

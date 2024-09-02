@@ -68,16 +68,16 @@ export class rulesetSettings extends ffgSettings {
       id: "ruleset-settings",
       classes: ["starwarsffg", "ruleset-settings"],
       title: `${game.i18n.localize("SWFFG.Settings.ruleset.Title")}`,
-      template: "systems/starwarsffg/templates/dialogs/ffg-ui-settings.html",
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
     });
   }
 
   getData(options) {
     const includeSettingsNames = [
-        "starwarsffg.dicetheme",
-        "starwarsffg.vehicleRangeBand",
-        "starwarsffg.skilltheme",
-        "starwarsffg.enableForceDie",
+        "genesysk2.dicetheme",
+        "genesysk2.vehicleRangeBand",
+        "genesysk2.skilltheme",
+        "genesysk2.enableForceDie",
     ];
     return super.getData(includeSettingsNames);
   }
@@ -87,16 +87,16 @@ export class uiSettings extends ffgSettings {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "ui-settings",
-      classes: ["starwarsffg", "ui-settings"],
+      classes: ["genesysk2", "ui-settings"],
       title: `${game.i18n.localize("SWFFG.Settings.ui.Title")}`,
-      template: "systems/starwarsffg/templates/dialogs/ffg-ui-settings.html",
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
     });
   }
 
   getData(options) {
     const includeSettingsNames = [
-      "starwarsffg.ui-uitheme",
-      "starwarsffg.ui-pausedImage",
+      "genesysk2.ui-uitheme",
+      "genesysk2.ui-pausedImage",
     ];
     return super.getData(includeSettingsNames);
   }
@@ -108,16 +108,16 @@ export class combatSettings extends ffgSettings {
       id: "combat-settings",
       classes: ["starwarsffg", "combat-settings"],
       title: `${game.i18n.localize("SWFFG.Settings.combat.Title")}`,
-      template: "systems/starwarsffg/templates/dialogs/ffg-ui-settings.html",
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
     });
   }
 
   getData(options) {
     const includeSettingsNames = [
-      "starwarsffg.useGenericSlots",
-      "starwarsffg.initiativeRule",
-      "starwarsffg.removeCombatantAction",
-      "starwarsffg.useDefense",
+      "genesysk2.useGenericSlots",
+      "genesysk2.initiativeRule",
+      "genesysk2.removeCombatantAction",
+      "genesysk2.useDefense",
     ];
     return super.getData(includeSettingsNames);
   }
@@ -129,22 +129,22 @@ export class actorSettings extends ffgSettings {
       id: "actor-settings",
       classes: ["starwarsffg", "actor-settings"],
       title: `${game.i18n.localize("SWFFG.Settings.actor.Title")}`,
-      template: "systems/starwarsffg/templates/dialogs/ffg-ui-settings.html",
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
     });
   }
 
   getData(options) {
     const includeSettingsNames = [
-      "starwarsffg.enableSoakCalc",
-      "starwarsffg.talentSorting",
-      "starwarsffg.showMinionCount",
-      "starwarsffg.showAdversaryCount",
-      "starwarsffg.adversaryItemName",
-      "starwarsffg.maxAttribute",
-      "starwarsffg.maxSkill",
-      "starwarsffg.medItemName",
-      "starwarsffg.HealingItemAction",
-      "starwarsffg.RivalTokenPrepend",
+      "genesysk2.enableSoakCalc",
+      "genesysk2.talentSorting",
+      "genesysk2.showMinionCount",
+      "genesysk2.showAdversaryCount",
+      "genesysk2.adversaryItemName",
+      "genesysk2.maxAttribute",
+      "genesysk2.maxSkill",
+      "genesysk2.medItemName",
+      "genesysk2.HealingItemAction",
+      "genesysk2.RivalTokenPrepend",
     ];
     return super.getData(includeSettingsNames);
   }
@@ -156,17 +156,17 @@ export class xpSpendingSettings extends ffgSettings {
       id: "xpSpending",
       classes: ["starwarsffg", "xpSpending"],
       title: `${game.i18n.localize("SWFFG.Settings.xpSpending.Title")}`,
-      template: "systems/starwarsffg/templates/dialogs/ffg-ui-settings.html",
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
     });
   }
 
   getData(options) {
     const includeSettingsNames = [
-      "starwarsffg.specializationCompendiums",
-      "starwarsffg.signatureAbilityCompendiums",
-      "starwarsffg.forcePowerCompendiums",
-      "starwarsffg.talentCompendiums",
-      "starwarsffg.notifyOnXpSpend",
+      "genesysk2.specializationCompendiums",
+      "genesysk2.signatureAbilityCompendiums",
+      "genesysk2.forcePowerCompendiums",
+      "genesysk2.talentCompendiums",
+      "genesysk2.notifyOnXpSpend",
     ];
     return super.getData(includeSettingsNames);
   }
@@ -178,15 +178,15 @@ export class localizationSettings extends ffgSettings {
       id: "localization",
       classes: ["starwarsffg", "localization"],
       title: `${game.i18n.localize("SWFFG.Settings.localization.Title")}`,
-      template: "systems/starwarsffg/templates/dialogs/ffg-ui-settings.html",
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
     });
   }
 
   getData(options) {
     const includeSettingsNames = [
-      "starwarsffg.skillSorting",
-      "starwarsffg.destiny-pool-light",
-      "starwarsffg.destiny-pool-dark",
+      "genesysk2.skillSorting",
+      "genesysk2.destiny-pool-light",
+      "genesysk2.destiny-pool-dark",
     ];
     return super.getData(includeSettingsNames);
   }
@@ -198,15 +198,15 @@ export class groupManagerSettings extends ffgSettings {
       id: "group-manager",
       classes: ["starwarsffg", "group-manager"],
       title: `${game.i18n.localize("SWFFG.Settings.groupManager.Title")}`,
-      template: "systems/starwarsffg/templates/dialogs/ffg-ui-settings.html",
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
     });
   }
 
   getData(options) {
     const includeSettingsNames = [
-      "starwarsffg.pcListMode",
-      "starwarsffg.privateTriggers",
-      "starwarsffg.GMCharactersInGroupManager"
+      "genesysk2.pcListMode",
+      "genesysk2.privateTriggers",
+      "genesysk2.GMCharactersInGroupManager"
     ];
     return super.getData(includeSettingsNames);
   }

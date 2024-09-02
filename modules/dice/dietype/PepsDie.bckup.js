@@ -1,4 +1,4 @@
-export class PepsDie extends DiceTerm {
+export class PepsDie extends foundry.dice.terms.DiceTerm {
   constructor(termData) {
     super(termData);
     this.faces = 6;

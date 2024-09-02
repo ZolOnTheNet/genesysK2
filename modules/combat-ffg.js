@@ -359,7 +359,7 @@ export class CombatFFG extends Combat {
    * @returns {string|undefined} - an array of
    */
   findSlotClaims(round, combatantId) {
-    const claims = this.getFlag('starwarsffg', 'combatClaims') || undefined;
+    const claims = this.getFlag('genesysk2', 'combatClaims') || undefined;
     if (!claims) {
       return undefined;
     }
@@ -404,7 +404,7 @@ export class CombatFFG extends Combat {
       await this.removeCombatantOnly(combatant.id);
     }
 
-    let action = game.settings.get("starwarsffg", "removeCombatantAction")
+    let action = game.settings.get("genesysk2", "removeCombatantAction")
     if (action === "prompt") {
       new Dialog({
         title: game.i18n.localize("SWFFG.CombatantRemoval.Title"),
@@ -487,7 +487,7 @@ export class CombatFFG extends Combat {
     CONFIG.logger.debug("Re-rendering the tracker and emitting a socket event for other clients");
     this.setupTurns();
     // emit a socket event
-    game.socket.emit("system.starwarsffg", {event: "trackerRender", combatId: combat.id});
+    game.socket.emit("system.genesysk2", {event: "trackerRender", combatId: combat.id});
   }
 
   async removeLastSlot(combatantId) {
@@ -684,7 +684,7 @@ export class CombatFFG extends Combat {
     CONFIG.logger.debug("Re-rendering the tracker and emitting a socket event for other clients");
     this.setupTurns();
     // emit a socket event
-    game.socket.emit("system.starwarsffg", {event: "trackerRender", combatId: combat.id});
+    game.socket.emit("system.genesysk2", {event: "trackerRender", combatId: combat.id});
   }
 }
 

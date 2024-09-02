@@ -20,7 +20,7 @@ export default class SettingsHelpers {
       type: String,
     });
 
-    game.settings.registerMenu("starwarsffg", "rulesetSettings", {
+    game.settings.registerMenu("genesysk2", "rulesetSettings", {
       name: game.i18n.localize("SWFFG.Settings.ruleset.Name"),
       hint: game.i18n.localize("SWFFG.Settings.ruleset.Hint"),
       label: game.i18n.localize("SWFFG.Settings.ruleset.Label"),
@@ -29,7 +29,7 @@ export default class SettingsHelpers {
       restricted: true,
     });
 
-    game.settings.registerMenu("starwarsffg", "uiSettings", {
+    game.settings.registerMenu("genesysk2", "uiSettings", {
       name: game.i18n.localize("SWFFG.Settings.ui.Name"),
       hint: game.i18n.localize("SWFFG.Settings.ui.Hint"),
       label: game.i18n.localize("SWFFG.Settings.ui.Label"),
@@ -38,7 +38,7 @@ export default class SettingsHelpers {
       restricted: true,
     });
 
-    game.settings.registerMenu("starwarsffg", "combatSettings", {
+    game.settings.registerMenu("genesysk2", "combatSettings", {
       name: game.i18n.localize("SWFFG.Settings.combat.Name"),
       hint: game.i18n.localize("SWFFG.Settings.combat.Hint"),
       label: game.i18n.localize("SWFFG.Settings.combat.Label"),
@@ -47,7 +47,7 @@ export default class SettingsHelpers {
       restricted: true,
     });
 
-    game.settings.registerMenu("starwarsffg", "actorSettings", {
+    game.settings.registerMenu("genesysk2", "actorSettings", {
       name: game.i18n.localize("SWFFG.Settings.actor.Name"),
       hint: game.i18n.localize("SWFFG.Settings.actor.Hint"),
       label: game.i18n.localize("SWFFG.Settings.actor.Label"),
@@ -56,7 +56,7 @@ export default class SettingsHelpers {
       restricted: true,
     });
 
-    game.settings.registerMenu("starwarsffg", "xpSpendingSettings", {
+    game.settings.registerMenu("genesysk2", "xpSpendingSettings", {
       name: game.i18n.localize("SWFFG.Settings.xpSpending.Name"),
       hint: game.i18n.localize("SWFFG.Settings.xpSpending.Hint"),
       label: game.i18n.localize("SWFFG.Settings.xpSpending.Label"),
@@ -65,7 +65,7 @@ export default class SettingsHelpers {
       restricted: true,
     });
 
-    game.settings.registerMenu("starwarsffg", "localizationSettings", {
+    game.settings.registerMenu("genesysk2", "localizationSettings", {
       name: game.i18n.localize("SWFFG.Settings.localization.Name"),
       hint: game.i18n.localize("SWFFG.Settings.localization.Hint"),
       label: game.i18n.localize("SWFFG.Settings.localization.Label"),
@@ -74,7 +74,7 @@ export default class SettingsHelpers {
       restricted: true,
     });
 
-    game.settings.registerMenu("starwarsffg", "groupManagerSettings", {
+    game.settings.registerMenu("genesysk2", "groupManagerSettings", {
       name: game.i18n.localize("SWFFG.Settings.groupManager.Name"),
       hint: game.i18n.localize("SWFFG.Settings.groupManager.Hint"),
       label: game.i18n.localize("SWFFG.Settings.groupManager.Label"),

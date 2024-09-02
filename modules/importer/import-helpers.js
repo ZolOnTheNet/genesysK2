@@ -1085,7 +1085,7 @@ export default class ImportHelpers {
           if (weaponItems.length > 0) {
             for (let i = 0; i < adversary.items.length; i += 1) {
               if (adversary.items[i].type === "weapon" && adversary.items[i].flags.genesysk2.ffgimportid === weapon.flags.genesysk2.ffgimportid) {
-                adversary.items[i] = mergeObject(weapon, adversary.items[i]);
+                adversary.items[i] = foundry.utils.mergeObject(weapon, adversary.items[i]);
               }
             }
           } else {
@@ -1132,7 +1132,7 @@ export default class ImportHelpers {
           if (talentItems.length > 0) {
             for (let i = 0; i < adversary.items.length; i += 1) {
               if (adversary.items[i].type === "talent" && adversary.items[i].flags.genesysk2.ffgimportid === talent.flags.genesysk2.ffgimportid) {
-                adversary.items[i] = mergeObject(talent, adversary.items[i]);
+                adversary.items[i] = foundry.utils.mergeObject(talent, adversary.items[i]);
               }
             }
           } else {
@@ -1171,7 +1171,7 @@ export default class ImportHelpers {
             if (armorItems.length > 0) {
               for (let i = 0; i < adversary.items.length; i += 1) {
                 if (adversary.items[i].type === "armor" && adversary.items[i].flags.genesysk2.ffgimportid === armor.flags.genesysk2.ffgimportid) {
-                  adversary.items[i] = mergeObject(armor, adversary.items[i]);
+                  adversary.items[i] = foundry.utils.mergeObject(armor, adversary.items[i]);
                 }
               }
             } else {
@@ -1218,7 +1218,7 @@ export default class ImportHelpers {
             }
 
             if (gearItem) {
-              gearItem = mergeObject(gear, gearItem);
+              gearItem = foundry.utils.mergeObject(gear, gearItem);
               gear.data.quantity.value = gearCount;
             } else {
               adversary.items.push(gear);
@@ -1261,7 +1261,7 @@ export default class ImportHelpers {
 
         let forceItem = adversary.items.find((s) => s.flags.genesysk2.ffgimportid === force.flags.genesysk2.ffgimportid);
         if (forceItem) {
-          forceItem = mergeObject(force, forceItem);
+          forceItem = foundry.utils.mergeObject(force, forceItem);
         } else {
           adversary.items.push(force);
         }
@@ -1681,7 +1681,7 @@ export default class ImportHelpers {
           let speciesItem = character.items.find((s) => s.flags.genesysk2.ffgimportid === species.flags.genesysk2.ffgimportid);
 
           if (speciesItem) {
-            species = mergeObject(species, speciesItem);
+            species = foundry.utils.mergeObject(species, speciesItem);
           } else {
             character.items.push(species);
           }
@@ -1782,7 +1782,7 @@ export default class ImportHelpers {
           let careerItem = character.items.find((s) => s.flags.genesysk2.ffgimportid === career.flags.genesysk2.ffgimportid);
 
           if (careerItem) {
-            careerItem = mergeObject(career, careerItem);
+            careerItem = foundry.utils.mergeObject(career, careerItem);
           } else {
             character.items.push(career);
           }
@@ -1899,7 +1899,7 @@ export default class ImportHelpers {
                 let specializationItem = character.items.find((s) => s.flags.genesysk2.ffgimportid === specialization.flags.genesysk2.ffgimportid);
 
                 if (specializationItem) {
-                  specializationItem = mergeObject(specialization, specializationItem);
+                  specializationItem = foundry.utils.mergeObject(specialization, specializationItem);
                 } else {
                   character.items.push(specialization);
                 }
@@ -1975,7 +1975,7 @@ export default class ImportHelpers {
           let forceItem = character.items.find((s) => s.flags.genesysk2.ffgimportid === force.flags.genesysk2.ffgimportid);
 
           if (forceItem) {
-            forceItem = mergeObject(force, forceItem);
+            forceItem = foundry.utils.mergeObject(force, forceItem);
           } else {
             character.items.push(force);
           }
@@ -2038,7 +2038,7 @@ export default class ImportHelpers {
             if (armorItems.length > 0) {
               for (let i = 0; i < character.items.length; i += 1) {
                 if (character.items[i].type === "armor" && character.items[i].flags.genesysk2.ffgimportid === armor.flags.genesysk2.ffgimportid) {
-                  character.items[i] = mergeObject(armor, character.items[i]);
+                  character.items[i] = foundry.utils.mergeObject(armor, character.items[i]);
                 }
               }
             } else {
@@ -2080,7 +2080,7 @@ export default class ImportHelpers {
             }
 
             if (gearItem) {
-              gearItem = mergeObject(gear, gearItem);
+              gearItem = foundry.utils.mergeObject(gear, gearItem);
               gear.system.quantity.value = gearCount;
             } else {
               character.items.push(gear);

@@ -578,7 +578,7 @@
         }
       },
       "spaceShip": false,
-      "silhouetteImage": "systems/starwarsffg/images/shipdefence.png"
+      "silhouetteImage": "systems/genesysk2/images/shipdefence.png"
     },
     "homestead": {
       "templates": ["biography", "attributes"],

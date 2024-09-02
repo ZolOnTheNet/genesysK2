@@ -7,6 +7,7 @@ import {lancerDesPep} from "../k2gdices/pepK2DicePromps.js";
 
 export default class DiceHelpers {
   static async rollSkill(obj, event, type, flavorText, sound) {
+    // gestion des lancer de dés lié à une action sur les formulaires
     const data = await obj.getData();
     const row = event.target.parentElement.parentElement;
     let skillName = row.parentElement.dataset["ability"];
@@ -76,7 +77,7 @@ export default class DiceHelpers {
     const itemData = item || {};
     const status = this.getWeaponStatus(itemData);
     let defenseDice = 0;
-    if (game.settings.get("starwarsffg", "useDefense")) {
+    if (game.settings.get("genesysk2", "useDefense")) {
       let isRanged = ["Ranged: Light", "Ranged: Heavy", "Gunnery"].includes(skill.value);
       let isMelee = ["Melee", "Brawl", "Lightsaber"].includes(skill.value);
       if (itemData?.type === "weapon") {

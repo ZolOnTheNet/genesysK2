@@ -1,4 +1,4 @@
-export class PepsDie extends FateDie {
+export class PepsDie extends foundry.dice.terms.FateDie {
   constructor(termData) {
     super(termData);
   }
@@ -14,18 +14,18 @@ export class PepsDie extends FateDie {
 
   /* -------------------------------------------- */
   /** @override */
-  evaluate({ minimize = false, maximize = false } = {}) {
+  async evaluate({ minimize = false, maximize = false } = {}) {
     if (this._evaluated) {
       throw new Error(`This ${this.constructor.name} has already been evaluated and is immutable`);
     }
 
     // Roll the initial number of dice
     for (let n = 1; n <= this.number; n++) {
-      this.roll({ minimize, maximize });
+      await this.roll({ minimize, maximize });
     }
 
     // Apply modifiers
-    this._evaluateModifiers();
+    await this._evaluateModifiers();
 
     // Combine all FFG results.
     this.ffg = { success: 0, failure: 0, advantage: 0, threat: 0, triumph: 0, despair: 0, light: 0, dark: 0 };
@@ -48,8 +48,8 @@ export class PepsDie extends FateDie {
 
   /* -------------------------------------------- */
   /** @override */
-  roll(options) {
-    const roll = super.roll(options);
+  async roll(options) {
+    const roll = await super.roll(options);
     let r = roll.result
     if(this.faces==3) r = r+2; // c'est un dé Fate ! score entre -1 et 1 => decalage vers 1 à 3
     roll.ffg = CONFIG.FFG.PEPS_RESULTS[r]; // tableau est entre 1 et 3

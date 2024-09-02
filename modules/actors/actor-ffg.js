@@ -32,7 +32,7 @@ export class ActorFFG extends Actor {
         createData.prototypeToken = {
           actorLink: false,
           disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE,
-          prependAdjective: game.settings.get("starwarsffg", "RivalTokenPrepend"),
+          prependAdjective: game.settings.get("genesysk2", "RivalTokenPrepend"),
         };
         break;
       case "nemesis":
@@ -272,8 +272,8 @@ export class ActorFFG extends Actor {
         activationLabel: element.system?.activation?.label,
         isRanked: element.system?.ranks?.ranked,
         source: [{
-          type: element?.flags?.starwarsffg?.fromSpecies ? "species" : "talent",
-          typeLabel: element?.flags?.starwarsffg?.fromSpecies ? "SWFFG.Species" : "SWFFG.Talent",
+          type: element?.flags?.genesysk2?.fromSpecies ? "species" : "talent",
+          typeLabel: element?.flags?.genesysk2?.fromSpecies ? "SWFFG.Species" : "SWFFG.Talent",
           name: element.name,
           id: element.id,
         }],
@@ -297,8 +297,8 @@ export class ActorFFG extends Actor {
         globalTalentList.push(item);
       } else {
         globalTalentList[index].source.push({
-          type: element?.flags?.starwarsffg?.fromSpecies ? "species" : "talent",
-          typeLabel: element?.flags?.starwarsffg?.fromSpecies ? "SWFFG.Species" : "SWFFG.Talent",
+          type: element?.flags?.genesysk2?.fromSpecies ? "species" : "talent",
+          typeLabel: element?.flags?.genesysk2?.fromSpecies ? "SWFFG.Species" : "SWFFG.Talent",
           name: element.name,
           id: element.id,
         });
@@ -569,7 +569,7 @@ export class ActorFFG extends Actor {
       let total = 0;
       total += data.attributes[key].value;
       total += ModifierHelpers.getCalculatedValueFromItems(items, key, "Characteristic");
-      data.characteristics[key].value = total > game.settings.get("starwarsffg", "maxAttribute") ? game.settings.get("starwarsffg", "maxAttribute") : total;
+      data.characteristics[key].value = total > game.settings.get("genesysk2", "maxAttribute") ? game.settings.get("genesysk2", "maxAttribute") : total;
     });
 
     /* Stats */
@@ -608,7 +608,7 @@ export class ActorFFG extends Actor {
       total += ModifierHelpers.getCalculatedValueFromItems(items, key, "Stat");
 
       if (key === "Soak") {
-        const enableAutoSoakCalc = (typeof this.flags?.starwarsffg?.config?.enableAutoSoakCalculation === "undefined" && game.settings.get("starwarsffg", "enableSoakCalc")) || this.flags.starwarsffg?.config.enableAutoSoakCalculation;
+        const enableAutoSoakCalc = (typeof this.flags?.genesysk2?.config?.enableAutoSoakCalculation === "undefined" && game.settings.get("genesysk2", "enableSoakCalc")) || this.flags.genesysk2?.config.enableAutoSoakCalculation;
         if (enableAutoSoakCalc) {
           data.stats[k].value = total;
         }
@@ -688,7 +688,7 @@ export class ActorFFG extends Actor {
       data.skills[key].remsetbacksource = remsetback.sources;
 
       if (isPC) {
-        data.skills[key].rank = total > game.settings.get("starwarsffg", "maxSkill") ? game.settings.get("starwarsffg", "maxSkill") : total;
+        data.skills[key].rank = total > game.settings.get("genesysk2", "maxSkill") ? game.settings.get("genesysk2", "maxSkill") : total;
       } else {
         data.skills[key].rank = total;
       }

@@ -36,7 +36,7 @@ export default class ActorHelpers {
           } else {
             stats = CONFIG.FFG.character_stats;
           }
-          const autoSoakCalculation = (typeof this.actor.flags?.starwarsffg?.config?.enableAutoSoakCalculation === "undefined" && game.settings.get("starwarsffg", "enableSoakCalc")) || this.actor.flags.starwarsffg?.config.enableAutoSoakCalculation;
+          const autoSoakCalculation = (typeof this.actor.flags?.genesysk2?.config?.enableAutoSoakCalculation === "undefined" && game.settings.get("genesysk2", "enableSoakCalc")) || this.actor.flags.genesysk2?.config.enableAutoSoakCalculation;
 
           Object.keys(stats).forEach((k) => {
             const key = stats[k].value;

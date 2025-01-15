@@ -30,6 +30,7 @@ export function configureDice() {
   CONFIG.FFG.THREAT_ICON = `systems/genesysk2/images/dice/${dicetheme}/threat.png`;
   CONFIG.FFG.DESPAIR_ICON = `systems/genesysk2/images/dice/${dicetheme}/despair.png`;
   CONFIG.FFG.DARK_ICON = `systems/genesysk2/images/dice/${dicetheme}/darkpip.png`;
+  CONFIG.FFG.ROLL_DICE = `systems/genesysk2/images/dice/${dicetheme}/rolling-dices.png`;
 
   CONFIG.FFG.ABILITY_RESULTS = {
     1: { label: "SWFFG.DiceResult.Blank", image: `systems/genesysk2/images/dice/${dicetheme}/green.png`, success: 0, failure: 0, advantage: 0, threat: 0, triumph: 0, despair: 0, light: 0, dark: 0 },

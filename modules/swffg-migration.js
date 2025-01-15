@@ -63,7 +63,7 @@ async function migrateTo1_901() {
   for (const actor of game.actors) {
     for (const species of actor.items.filter(a => a.type === "species")) {
       for (const talent of Object.values(species.system.talents)) {
-        await actor.items.find(i => i.name === talent.name)?.update({flags: {starwarsffg: {fromSpecies: true}}});
+        await actor.items.find(i => i.name === talent.name)?.update({flags: {genesysk2: {fromSpecies: true}}});
       }
     }
   }

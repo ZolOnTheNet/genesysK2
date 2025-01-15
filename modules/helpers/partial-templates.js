@@ -23,6 +23,10 @@ export default class TemplateHelpers {
       "systems/genesysk2/templates/dialogs/combat-tracker.html",
       "systems/genesysk2/templates/chat/parts/item/ffg-header.html",
       "systems/genesysk2/templates/chat/parts/item/ffg-footer.html",
+      //--------------------------------------------
+      "systems/genesysk2/templates/parts/actor/k2g-spells.html",
+      "systems/genesysk2/templates/parts/shared/k2g-tabs.html",
+      "systems/genesysk2/templates/parts/shared/k2g-block.html",      
     ];
 
     return loadTemplates(templatePaths);

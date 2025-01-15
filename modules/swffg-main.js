@@ -1060,7 +1060,7 @@ Hooks.once("ready", async () => {
           const created = await actor.createEmbeddedDocuments("Item", toAdd);
           created.forEach(created_item => {
             // mark the items as coming from a species
-            created_item.update({flags: {starwarsffg: {fromSpecies: true}}});
+            created_item.update({flags: {genesysk2: {fromSpecies: true}}});
           });
         }
       }

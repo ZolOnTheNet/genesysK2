@@ -132,6 +132,7 @@ export default class DiceHelpers {
     }
   }
 
+  // Creation des icones pour les pools de dés sous forme FFG
   static async addSkillDicePool(obj, elem) {
     const data = await obj.getData();
     const skillName = elem.dataset["ability"];

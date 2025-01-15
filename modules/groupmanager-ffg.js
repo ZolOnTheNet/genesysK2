@@ -6,7 +6,7 @@ export class GroupManagerLayer extends CanvasLayer {
   }
 
   static get layerOptions() {
-    return foundry.utils.mergeObject(super.layerOptions, {
+    return mergeObject(super.layerOptions, {
       canDragCreate: false,
     });
   }

@@ -225,6 +225,7 @@ export class DicePoolFFG {
 
   /**
    * Create a preview of the dice pool using images
+   * Créer une zone contenant les dessins des images
    * @param container {HTMLElement} where to place the preview. A container will be generated if this is undefined
    * @returns {HTMLElement}
    */
@@ -247,23 +248,26 @@ export class DicePoolFFG {
       width = 12;
     }
 
-    this._addIcons(container, CONFIG.FFG.PROFICIENCY_ICON, this.proficiency, height, width);
-    this._addIcons(container, CONFIG.FFG.ABILITY_ICON, this.ability, height, width);
-    this._addIcons(container, CONFIG.FFG.CHALLENGE_ICON, this.challenge, height, width);
-    this._addIcons(container, CONFIG.FFG.DIFFICULTY_ICON, this.difficulty, height, width);
-    this._addIcons(container, CONFIG.FFG.BOOST_ICON, this.boost, height, width);
-    this._addIcons(container, CONFIG.FFG.SETBACK_ICON, this.setback, height, width);
-    this._addIcons(container, CONFIG.FFG.REMOVESETBACK_ICON, this.remsetback, height, width);
-    this._addIcons(container, CONFIG.FFG.FORCE_ICON, this.force, height, width);
-    this._addIcons(container, CONFIG.FFG.SUCCESS_ICON, this.success, height, width);
-    this._addIcons(container, CONFIG.FFG.ADVANTAGE_ICON, this.advantage, height, width);
-    this._addIcons(container, CONFIG.FFG.TRIUMPH_ICON, this.triumph, height, width);
-    this._addIcons(container, CONFIG.FFG.LIGHT_ICON, this.light, height, width);
-    this._addIcons(container, CONFIG.FFG.FAILURE_ICON, this.failure, height, width);
-    this._addIcons(container, CONFIG.FFG.THREAT_ICON, this.threat, height, width);
-    this._addIcons(container, CONFIG.FFG.DESPAIR_ICON, this.despair, height, width);
-    this._addIcons(container, CONFIG.FFG.DARK_ICON, this.dark, height, width);
-
+    if(game.settings.get('genesysk2','enablePEP')){
+      this._addIcons(container, CONFIG.FFG.ROLL_DICE, totalDice, height, width);
+    } else {
+      this._addIcons(container, CONFIG.FFG.PROFICIENCY_ICON, this.proficiency, height, width);
+      this._addIcons(container, CONFIG.FFG.ABILITY_ICON, this.ability, height, width);
+      this._addIcons(container, CONFIG.FFG.CHALLENGE_ICON, this.challenge, height, width);
+      this._addIcons(container, CONFIG.FFG.DIFFICULTY_ICON, this.difficulty, height, width);
+      this._addIcons(container, CONFIG.FFG.BOOST_ICON, this.boost, height, width);
+      this._addIcons(container, CONFIG.FFG.SETBACK_ICON, this.setback, height, width);
+      this._addIcons(container, CONFIG.FFG.REMOVESETBACK_ICON, this.remsetback, height, width);
+      this._addIcons(container, CONFIG.FFG.FORCE_ICON, this.force, height, width);
+      this._addIcons(container, CONFIG.FFG.SUCCESS_ICON, this.success, height, width);
+      this._addIcons(container, CONFIG.FFG.ADVANTAGE_ICON, this.advantage, height, width);
+      this._addIcons(container, CONFIG.FFG.TRIUMPH_ICON, this.triumph, height, width);
+      this._addIcons(container, CONFIG.FFG.LIGHT_ICON, this.light, height, width);
+      this._addIcons(container, CONFIG.FFG.FAILURE_ICON, this.failure, height, width);
+      this._addIcons(container, CONFIG.FFG.THREAT_ICON, this.threat, height, width);
+      this._addIcons(container, CONFIG.FFG.DESPAIR_ICON, this.despair, height, width);
+      this._addIcons(container, CONFIG.FFG.DARK_ICON, this.dark, height, width);
+    }
     this._addSourceToolTip(container);
 
     return container;

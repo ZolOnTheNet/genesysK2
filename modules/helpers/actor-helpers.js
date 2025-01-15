@@ -92,8 +92,8 @@ export default class ActorHelpers {
             }
           });
           // Handle skill rank updates
-          Object.keys(this.object.system.skills).forEach((key) => {
-            let total = ModifierHelpers.getCalculateValueForAttribute(key, this.actor.system.attributes, ownedItems, "Skill Rank");
+          Object.keys(this.object.system.skills).forEach((key) => { // modification vers l'attribut mais peut être changer le attribut en skill càd garder key, et .system.skills
+            let total = ModifierHelpers.getCalculateValueForAttribute(this.object.system.skills[key].characteristic, this.actor.system.attributes, ownedItems, "Skill Rank");
             let x = parseInt(formData.data.skills[key]?.rank, 10) - total;
             let y = parseInt(formData.data.attributes[key]?.value, 10) + x;
             if (y > 0) {

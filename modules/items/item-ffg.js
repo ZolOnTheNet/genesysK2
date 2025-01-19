@@ -72,7 +72,7 @@ export class ItemFFG extends ItemBaseFFG {
       if (this.compendium) {
         item.flags.genesysk2.isCompendium = true;
         // Temporary check on this.parent.data to avoid initialisation failing in Foundry VTT 0.8.6
-        if (this.parent?.system) item.flags.genesysk2.ffgUuid = this.uuid;
+        if (this.uuid) item.flags.genesysk2.ffgUuid = this.uuid;
       } else {
         item.flags.genesysk2.isCompendium = false;
         item.flags.genesysk2.ffgIsOwned = false;
@@ -369,6 +369,11 @@ export class ItemFFG extends ItemBaseFFG {
           } else {
             itemList[index].rank += 1;
           }
+        }
+
+        if (itemType === "talent") {
+          const id = parseInt(upgrade.replace("talent", ""), 10);          
+          talents[upgrade].cost = (Math.trunc(id / 4) + 1) * 5;
         }
 
         if (typeof talents[upgrade].visible === "undefined") {

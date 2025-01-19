@@ -288,7 +288,20 @@ export class ActorSheetFFG extends ActorSheet {
       data.xpLog = this.actor.flags.genesysk2.xpLog.join("<br>");
     }
 
+    data.actor.items = ActorSheetFFG.sortForActorSheet(data.actor.items);
+
     return data;
+  }
+
+  /**
+   * Sorts actor items by name so that they are presented in a constant order
+   * @param items
+   * @returns {*}
+   */
+  static sortForActorSheet(items) {
+    return items.sort(function(a, b) {
+       return a.name.localeCompare(b.name);
+    });
   }
 
   /* -------------------------------------------- */
@@ -738,7 +751,7 @@ export class ActorSheetFFG extends ActorSheet {
                 default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER,
               }
             };
-            const tempItem = await Item.create(itemData, {temporary: true});
+            const tempItem = await new Item(itemData, { temporary: true });
             tempItem.sheet.render(true);
           } else {
             CONFIG.logger.debug(`Unknown item type: ${itemType}, or lacking new embed system`);
@@ -1738,7 +1751,9 @@ export class ActorSheetFFG extends ActorSheet {
             if (!entry) {
               entry = await pack.index.find((e) => e.name === specializationTalents[talent].name);
             }
-            gameItem = await pack.getDocument(entry._id);
+            if (entry) {
+              gameItem = await pack.getDocument(entry._id);
+            }
           }
         } else {
           gameItem = await game.items.get(specializationTalents[talent].itemId);
@@ -2100,6 +2115,9 @@ export class ActorSheetFFG extends ActorSheet {
     } else if (action === "characteristic") {
       const characteristic = $(event.target).data("buy-characteristic");
       await this._buyCharacteristicRank(characteristic);
+      return;
+    } else if (action === "skill") {
+      await this._buySkillRank(event.target.parentElement.parentElement.parentElement);
       return;
     } else {
       CONFIG.logger.debug(`Refusing purchase action ${action} since it is not registered`);

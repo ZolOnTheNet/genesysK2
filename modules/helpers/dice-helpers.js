@@ -45,8 +45,10 @@ export default class DiceHelpers {
       success: 0,
       triumph: 0,
       despair: 0,
+      remsetback: 0,
       upgrades: 0,
       label: skillData?.label ? game.i18n.localize(skillData.label) : game.i18n.localize(skillName),
+      source: {},
     };
     let characteristic = {
       value: 0
@@ -76,22 +78,7 @@ export default class DiceHelpers {
     }
     const itemData = item || {};
     const status = this.getWeaponStatus(itemData);
-    let defenseDice = 0;
-    if (game.settings.get("genesysk2", "useDefense")) {
-      let isRanged = ["Ranged: Light", "Ranged: Heavy", "Gunnery"].includes(skill.value);
-      let isMelee = ["Melee", "Brawl", "Lightsaber"].includes(skill.value);
-      if (itemData?.type === "weapon") {
-        if (game.user.targets.size > 0) {
-          for (const target of game.user.targets) {
-            if (isRanged) {
-              defenseDice = Math.max(defenseDice, target.actor.system.stats.defence.ranged);
-            } else if (isMelee) {
-              defenseDice = Math.max(defenseDice, target.actor.system.stats.defence.melee);
-            }
-          }
-        }
-      }
-    }
+    let defenseDice = this.getDefenseDice(skill, itemData);
 
     // TODO: Get weapon specific modifiers from itemmodifiers and itemattachments
 
@@ -109,6 +96,7 @@ export default class DiceHelpers {
       triumph: skill.triumph,
       despair: skill.despair,
       upgrades: skill.upgrades,
+      remsetback: skill?.remsetback ? skill.remsetback : 0,
       difficulty: 2 + status.difficulty, // default to average difficulty
     });
     
@@ -122,6 +110,26 @@ export default class DiceHelpers {
 
     dicePool = new DicePoolFFG(await this.getModifiers(dicePool, itemData));
     await this.displayRollDialog(data, dicePool, `${game.i18n.localize("SWFFG.Rolling")} ${game.i18n.localize(skill.label)}`, skill.label, itemData, flavorText, sound);
+  }
+
+  static getDefenseDice(skill, itemData){
+    let defenseDice = 0;
+    if (game.settings.get("genesysk2", "useDefense")) {
+      let isRanged = ["Ranged: Light", "Ranged: Heavy", "Gunnery"].includes(skill.value);
+      let isMelee = ["Melee", "Brawl", "Lightsaber"].includes(skill.value);
+      if (itemData?.type === "weapon" || itemData?.metaData?.tags?.includes("weapon")) {
+        if (game.user.targets.size > 0) {
+          for (const target of game.user.targets) {
+            if (isRanged) {
+              defenseDice = Math.max(defenseDice, target.actor.system.stats.defence.ranged);
+            } else if (isMelee) {
+              defenseDice = Math.max(defenseDice, target.actor.system.stats.defence.melee);
+            }
+          }
+        }
+      }
+    }
+    return defenseDice;
   }
 
   static async displayRollDialog(data, dicePool, description, skillName, item, flavorText, sound) {
@@ -155,6 +163,7 @@ export default class DiceHelpers {
         triumph: skill?.triumph ? skill.triumph : 0,
         despair: skill?.despair ? skill.despair : 0,
         upgrades: skill?.upgrades ? skill.upgrades : 0,
+        remsetback: skill?.remsetback ? skill.remsetback : 0,
         source: {
           skill: skill?.ranksource?.length ? skill.ranksource : [],
           boost: skill?.boostsource?.length ? skill.boostsource : [],
@@ -166,7 +175,8 @@ export default class DiceHelpers {
           failure: skill?.failuresource?.length ? skill.failuresource : [],
           threat: skill?.threatsource?.length ? skill.threatsource : [],
           success: skill?.successsource?.length ? skill.successsource : [],
-          upgrades: skill?.upgradessource?.length ? skill.upgradessource: [],
+          remsetback: skill?.remsetbacksource.length ? skill.remsetbacksource : [],
+          upgrades: skill?.upgradessource?.length ? skill.upgradessource : [],
         },
       });
             
@@ -189,11 +199,11 @@ export default class DiceHelpers {
 
     const skill = actor.system.skills[itemData.skill.value];
     const characteristic = actor.system.characteristics[skill.characteristic];
-
+    let defenseDice = this.getDefenseDice(skill, itemData);
     let dicePool = new DicePoolFFG({
       ability: Math.max(characteristic.value, skill.rank),
       boost: skill.boost,
-      setback: skill.setback + status.setback,
+      setback: skill.setback + status.setback + defenseDice,
       force: skill.force,
       advantage: skill.advantage,
       dark: skill.dark,
@@ -204,6 +214,7 @@ export default class DiceHelpers {
       triumph: skill?.triumph ? skill.triumph : 0,
       despair: skill?.despair ? skill.despair : 0,
       upgrades: skill?.upgrades ? skill.upgrades : 0,
+      remsetback: skill?.remsetback ? skill.remsetback : 0,
       difficulty: 2 + status.difficulty, // default to average difficulty
     });
 
@@ -230,6 +241,7 @@ export default class DiceHelpers {
       success: skill.success,
       triumph: skill?.triumph ? skill.triumph : 0,
       despair: skill?.despair ? skill.despair : 0,
+      remsetback: skill?.remsetback ? skill.remsetback : 0,
       upgrades: skill?.upgrades ? skill.upgrades : 0,
     });
 
@@ -242,7 +254,7 @@ export default class DiceHelpers {
     let setback = 0;
     let difficulty = 0;
 
-    if (item.type === "weapon" && item?.system?.status && item.system.status !== "None") {
+    if ((item.type === "weapon" || item.type === "shipweapon" ) && item?.system?.status && item.system.status !== "None") {
       const status = CONFIG.FFG.itemstatus[item.system.status].attributes.find((i) => i.mod === "Setback");
 
       if (status.value < 99) {
@@ -297,7 +309,7 @@ export function get_dice_pool(actor_id, skill_name, incoming_roll) {
   const characteristic = actor.system.characteristics[skill.characteristic];
 
   const dicePool = new DicePoolFFG({
-    ability: (Math.max(characteristic.value, skill.rank) + incoming_roll.ability) - (Math.min(characteristic.value, skill.rank) + incoming_roll.proficiency),
+    ability: Math.max(characteristic.value, skill.rank) + incoming_roll.ability - (Math.min(characteristic.value, skill.rank) + incoming_roll.proficiency),
     proficiency: Math.min(characteristic.value, skill.rank) + incoming_roll.proficiency,
     boost: skill.boost + incoming_roll.boost,
     setback: skill.setback + incoming_roll.setback,
@@ -311,8 +323,9 @@ export function get_dice_pool(actor_id, skill_name, incoming_roll) {
     triumph: skill.triumph + incoming_roll.triumph,
     despair: skill.despair + incoming_roll.despair,
     upgrades: skill.upgrades + incoming_roll.upgrades,
-    remsetback: skill.remsetback + incoming_roll.remsetback,
+    remsetback: skill?.remsetback ? skill.remsetback : 0 + incoming_roll.remsetback,
     difficulty: +incoming_roll.difficulty,
+    challenge: +incoming_roll.challenge,
   });
   return dicePool;
 }

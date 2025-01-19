@@ -2,6 +2,7 @@ export default class TemplateHelpers {
   static async preload() {
     const templatePaths = [
       "systems/genesysk2/templates/parts/shared/ffg-modifiers.html",
+      "systems/genesysk2/templates/parts/shared/ffg-sources.html",
       "systems/genesysk2/templates/parts/actor/ffg-skills.html",
       "systems/genesysk2/templates/parts/actor/ffg-weapon-armor-gear.html",
       "systems/genesysk2/templates/parts/actor/ffg-vehicle-weapon-attachments.html",
@@ -26,7 +27,7 @@ export default class TemplateHelpers {
       //--------------------------------------------
       "systems/genesysk2/templates/parts/actor/k2g-spells.html",
       "systems/genesysk2/templates/parts/shared/k2g-tabs.html",
-      "systems/genesysk2/templates/parts/shared/k2g-block.html",      
+      "systems/genesysk2/templates/parts/shared/k2g-block.html",            
     ];
 
     return loadTemplates(templatePaths);

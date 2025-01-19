@@ -284,6 +284,16 @@ Hooks.once("init", async function () {
   });
 
   /**
+   * Register a setting to avoid spamming compendium warnings for Genesys players or whomever
+   */
+  game.settings.register("genesysk2", "compendiumsPreviouslyEmpty", {
+    scope: "world",
+    config: false,
+    default: false,
+    type: Boolean,
+  });
+
+  /**
    * Set an initiative formula for the system
    * @type {String}
    */
@@ -470,6 +480,16 @@ Hooks.once("init", async function () {
   // Add utilities to the global scope, this can be useful for macro makers
   window.DicePoolFFG = DicePoolFFG;
 
+  // add back in the select helper (under a new name, so we don't get warnings)
+  Handlebars.registerHelper({
+    selectFfg: function (selected, options) {
+      const escapedValue = RegExp.escape(Handlebars.escapeExpression(selected));
+      const rgx = new RegExp(' value=[\"\']' + escapedValue + '[\"\']');
+      const html = options.fn(this);
+      return html.replace(rgx, "$& selected");
+    }
+  });
+
   // Register Handlebars utilities
   Handlebars.registerHelper("json", JSON.stringify);
 
@@ -588,10 +608,10 @@ Hooks.once("init", async function () {
             result += options.fn({item: list[i]});
 
     return result.length > 0 ? result : options.inverse();
-});
+  });
 
 
-  TemplateHelpers.preload();
+  await TemplateHelpers.preload();
 });
 
 Hooks.on("renderSidebarTab", (app, html, data) => {
@@ -666,7 +686,7 @@ Hooks.on("renderChatMessage", async (app, html, messageData) => {
   });
 
   // collapse / expand item details
-  html.find(".starwarsffg.item-card .summary").on("click", async (event) => {
+  html.find(".genesysk2.item-card .summary").on("click", async (event) => {
     event.preventDefault();
     const li = $(event.currentTarget);
     const details = li.parent().children(".collapsible-content");
@@ -707,7 +727,7 @@ Hooks.on("renderChatMessage", async (app, html, messageData) => {
           default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER,
         }
       };
-      const tempItem = await Item.create(itemData, {temporary: true});
+      const tempItem = await new Item(itemData, {temporary: true});
       tempItem.sheet.render(true);
     } else {
       CONFIG.logger.debug(`Unknown item type: ${itemType}, or lacking new embed system`);
@@ -1042,7 +1062,7 @@ Hooks.once("ready", async () => {
         // abilities
         for(const abilityId of Object.keys(item.system.abilities)) {
           const abilityData = item.system.abilities[abilityId];
-          const abilityItem = await Item.create(
+          const abilityItem = await new Item(
             {
               name: abilityData.name,
               type: "ability",
@@ -1164,7 +1184,9 @@ Hooks.once("ready", async () => {
     return token;
   });
 
+{  
   // modification de la façon d'appeler la magie XXXX
+  // XXX a vérifier si cela est encore bon entre les paranthèses contenant ce texte
   //game.settings.set("genesysk2","codeSkill") //= ["SWFFG","K2G","RTG","CRU",]
   let tabNameSkillGame = ['starwars','k2genesys','roguetrader','genesys','android', 'terrinoth', 'crucible']
   //let tabCodeSkillGame = ['SWFFG', 'k2G','RTG','GNS','ANDR','TRG','CRU'] //the code Name
@@ -1176,7 +1198,19 @@ Hooks.once("ready", async () => {
   // game.i18n.translations.SWFFG.ForcePool = game.i18n.translations[codeSkill].ForcePool
   // game.i18n.translations.SWFFG.ForcePoolCommitted = game.i18n.translations[codeSkill].ForcePoolCommitted
   // game.i18n.translations.SWFFG.ForcePoolAvailable = game.i18n.translations[codeSkill].ForcePoolAvailable
-
+}
+  const empty = await compendiumsEmpty();
+  if (empty && !game.settings.get("genesysk2", "compendiumsPreviouslyEmpty")) {
+    const template = "systems/genesysk2/templates/notifications/empty_compendiums.html";
+    const html = await renderTemplate(template);
+    const messageData = {
+      user: game.user.id,
+      type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+      content: html,
+    };
+    ChatMessage.create(messageData);
+    await game.settings.set("genesysk2", "compendiumsPreviouslyEmpty", true);
+  }
 });
 
 Hooks.once("diceSoNiceReady", (dice3d) => {
@@ -1534,4 +1568,19 @@ async function registerCrewRoles() {
     config: false,
     type: Object,
   });
+}
+
+/**
+ * Check if all built-in compendiums are empty or not
+ * @returns {Promise<boolean>}
+ */
+async function compendiumsEmpty() {
+  const compendiums = game.packs.contents.filter(i => i.collection.includes("starwars"));
+  for (const compendium of compendiums) {
+    if ((await compendium.getDocuments()).length !== 0) {
+      return false;
+    }
+  }
+
+  return compendiums.length > 0;
 }

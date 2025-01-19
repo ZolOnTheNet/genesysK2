@@ -214,8 +214,20 @@ export class DicePoolFFG {
    * Transform the dice pool into a rollable expression
    * @returns {string} a dice expression that can be used to roll the dice pool
    */
-  renderDiceExpression() { // modif de f vers m pour force
-    let dicePool = [this.proficiency + "dp", this.ability + "da", this.challenge + "dc", this.difficulty + "di", this.boost + "db", this.setback + "ds", this.force + "dm"];
+  renderDiceExpression() {
+    let setbackDice = game.settings.get("genesysk2", "ApplyRemoveSetbackMods")
+      ? Math.max(0, this.setback - this.remsetback)
+      : this.setback;
+
+    let dicePool = [
+      this.proficiency + "dp",
+      this.ability + "da",
+      this.challenge + "dc",
+      this.difficulty + "di",
+      this.boost + "db",
+      setbackDice + "ds",
+      this.force + "dm",  // modif de f vers m pour force
+    ];
     let finalPool = dicePool.filter((d) => {
       const test = d.split(/([0-9]+)/);
       return test[1] > 0;

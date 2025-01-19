@@ -2,7 +2,7 @@
   "id": "genesysk2",
   "title": "K² Genesys avancé",
   "description": "Un système pour pouvoir jouer à K² avec Genesys.",
-  "version": "1.903",
+  "version": "1.905",
   "compatibility": {
     "minimum": 12,
     "verified": 12
@@ -25,7 +25,7 @@
       "label": "Armor",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -38,7 +38,7 @@
       "label": "Careers",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -51,7 +51,7 @@
       "label": "Force Powers",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -64,7 +64,7 @@
       "label": "Gear",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -77,7 +77,7 @@
       "label": "Signature Abilities",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -90,7 +90,7 @@
       "label": "Skill Descriptions",
       "banner": "ui/banners/journalentry-banner.webp",
       "type": "JournalEntry",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -103,7 +103,7 @@
       "label": "Specializations",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -116,7 +116,7 @@
       "label": "Species",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -129,7 +129,7 @@
       "label": "Talents",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -142,7 +142,7 @@
       "label": "Vehicles - Planetary",
       "banner": "ui/banners/actor-banner.webp",
       "type": "Actor",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -155,7 +155,7 @@
       "label": "Vehicles - Space",
       "banner": "ui/banners/actor-banner.webp",
       "type": "Actor",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -168,7 +168,7 @@
       "label": "Vehicles - Weapons",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -181,7 +181,7 @@
       "label": "Weapons",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -194,7 +194,7 @@
       "label": "Armor Attachments",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -207,7 +207,7 @@
       "label": "Weapon Attachments",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -220,7 +220,7 @@
       "label": "Vehicle Attachments",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -233,7 +233,7 @@
       "label": "Generic Attachments",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -246,7 +246,7 @@
       "label": "Vehicle Mods",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -259,7 +259,7 @@
       "label": "Armor Mods",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -272,7 +272,7 @@
       "label": "Weapon Mods",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -285,7 +285,7 @@
       "label": "Generic Mods",
       "banner": "ui/banners/item-banner.webp",
       "type": "Item",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -298,7 +298,7 @@
       "label": "Star Wars Adversaries",
       "banner": "ui/banners/actor-banner.webp",
       "type": "Actor",
-      "system": "starwarsffg",
+      "system": "genesysk2",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "TRUSTED": "OWNER",
@@ -422,6 +422,6 @@
   "secondaryTokenAttribute": "strain",
   "url": "https://github.com/ZolOnTheNet/genesysK2",
   "manifest": "https://github.com/ZolOnTheNet/genesysK2/releases/latest/download/system.json",
-  "download": "https://github.com/ZolOnTheNet/genesysK2/genesysK2_1.809.zip",
+  "download": "https://github.com/ZolOnTheNet/genesysK2/genesysK2_1.905.zip",
   "license": "LICENSE.txt"
 }

@@ -53,9 +53,12 @@
   "SWFFG.TabBiography": "Biography",
   "SWFFG.TabDescription": "Description",
   "SWFFG.TabModifiers": "Modifiers",
+  "SWFFG.TabSources": "Long Description and Sources",
   "SWFFG.TabSpecializations": "Specializations",
   "SWFFG.TabCareer": "Career Data",
   "SWFFG.TabXpLog": "XP log",
+  "SWFFG.LongDescription": "Long Description:",
+  "SWFFG.Sources": "Source(s):",
   "SWFFG.CharacteristicBrawn": "Brawn",
   "SWFFG.CharacteristicBrawnAbbreviation": "Br",
   "SWFFG.CharacteristicAgility": "Agility",
@@ -334,6 +337,7 @@
   "SWFFG.ConflictTalent": "Conflict Talent",
   "SWFFG.LoadFile": "Load File",
   "SWFFG.ImportFile": "Start Import",
+  "SWFFG.CheckAll": "Select All",
   "SWFFG.Cost": "COST:",
   "SWFFG.EnableSoakCalc": "Enable Soak Auto-Calculation",
   "SWFFG.EnableSoakCalcHint": "Enable soak auto-calculation and unload field for manual entry",
@@ -765,5 +769,7 @@
   "SWFFG.Settings.actor.RivalTokenPrepend.Name": "Prepend Adjective to rival tokens",
   "SWFFG.Settings.actor.RivalTokenPrepend.Hint": "Unlinked rival's token name will be prepended with an Adjective by default. Example: \"Angry\"",
   "SWFFG.Settings.groupManager.GMCharactersInGroupManager.Name": "Show GM Characters in Group Manager",
-  "SWFFG.Settings.groupManager.GMCharactersInGroupManager.Hint": "Characters owned by a GM will be included in the Group Manager"
+  "SWFFG.Settings.groupManager.GMCharactersInGroupManager.Hint": "Characters owned by a GM will be included in the Group Manager",
+  "SWFFG.Settings.dice.ApplyRemoveSetbackMods.Name": "Roll - Apply \"Remove setback\" mods",
+  "SWFFG.Settings.dice.ApplyRemoveSetbackMods.Hint": "Automatically apply \"Remove setback\" modifiers when rolling dice."
 }

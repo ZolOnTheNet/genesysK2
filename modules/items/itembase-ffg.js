@@ -16,8 +16,8 @@ export default class ItemBaseFFG extends Item {
       const preState = Object.values(this.apps)[0]?._state;
       await EmbeddedItemHelpers.updateRealObject(this, data);
 
-      if (this.flags?.genesysk2?.ffgParent?.isCompendium || Object.values(this.apps)[0]._state !== preState) {
-        if (this.flags?.genesysk2?.ffgParent?.ffgUuid) {
+      if (this.flags?.genesysk2?.ffgParent?.genesysk2?.isCompendium || Object.values(this.apps)[0]?._state !== preState) {
+        if (this.flags?.genesysk2?.ffgParent?.genesysk2?.ffgUuid) {
           this.sheet.render(false);
         }
       } else {

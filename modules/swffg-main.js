@@ -7,7 +7,12 @@
 // Import Modules
 import { FFG } from "./swffg-config.js";
 import { ActorFFG } from "./actors/actor-ffg.js";
-import CombatantFFG, {CombatFFG, CombatTrackerFFG, updateCombatTracker} from "./combat-ffg.js";
+import CombatantFFG, {
+  CombatFFG,
+  CombatTrackerFFG,
+  registerHandleCombatantRemoval,
+  updateCombatTracker
+} from "./combat-ffg.js";
 import { ItemFFG } from "./items/item-ffg.js";
 import { ItemSheetFFG } from "./items/item-sheet-ffg.js";
 import { ItemSheetFFGV2 } from "./items/item-sheet-ffg-v2.js";
@@ -43,6 +48,7 @@ import CrewSettings from "./settings/crew-settings.js";
 import {register_dice_enricher, register_oggdude_tag_enricher, register_roll_tag_enricher} from "./helpers/journal.js";
 import {drawAdversaryCount, drawMinionCount, registerTokenControls} from "./helpers/token.js";
 import {handleUpdate} from "./swffg-migration.js";
+import SWAImporter from "./importer/swa-importer.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -150,14 +156,26 @@ Hooks.once("init", async function () {
 
   switch (uitheme) {
     case "mandar": {
-      $('link[href*="styles/starwarsffg.css"]').prop("disabled", true);
+      $('link[href*="styles/genesysk2.css"]').prop("disabled", true);
       $("head").append('<link href="systems/genesysk2/styles/mandar.css" rel="stylesheet" type="text/css" media="all">');
       break;
     }
     default: {
-      $('link[href*="styles/starwarsffg.css"]').prop("disabled", false);
+      $('link[href*="styles/genesysk2.css"]').prop("disabled", false);
     }
   }
+
+  /**
+   * Register default XP spend notification
+   */
+  game.settings.register("genesysk2", "notifyOnXpSpend", {
+    name: game.i18n.localize("SWFFG.Settings.Purchase.Notify.Name"),
+    hint: game.i18n.localize("SWFFG.Settings.Purchase.Notify.Hint"),
+    scope: "world",
+    config: false,
+    default: true,
+    type: Boolean,
+  });
 
   /**
    * Register the option to use generic slots for combat
@@ -166,7 +184,7 @@ Hooks.once("init", async function () {
     name: game.i18n.localize("SWFFG.Settings.UseGenericSlots.Name"),
     hint: game.i18n.localize("SWFFG.Settings.UseGenericSlots.Hint"),
     scope: "world",
-    config: true,
+    config: false,
     default: true,
     type: Boolean,
     onChange: (rule) => window.location.reload()
@@ -177,39 +195,94 @@ Hooks.once("init", async function () {
   }
 
   /**
+   * Register action to take when a user removes a combatant from combat
+   */
+  game.settings.register("genesysk2", "removeCombatantAction", {
+    name: game.i18n.localize("SWFFG.Settings.RemoveCombatantAction.Name"),
+    hint: game.i18n.localize("SWFFG.Settings.RemoveCombatantAction.Hint"),
+    scope: "world",
+    config: false,
+    default: "combatant_only",
+    type: String,
+    choices: {
+      combatant_only: "Combatant Only",
+      last_slot: "Last Slot",
+      prompt: "Prompt",
+    },
+  });
+
+  /**
+   * Register the max value for characteristics and skills
+   */
+  game.settings.register("genesysk2", "maxAttribute", {
+    name: game.i18n.localize("SWFFG.Settings.maxAttribute.Name"),
+    hint: game.i18n.localize("SWFFG.Settings.maxAttribute.Hint"),
+    scope: "world",
+    config: false,
+    default: 7,
+    type: Number,
+  });
+  game.settings.register("genesysk2", "maxSkill", {
+    name: game.i18n.localize("SWFFG.Settings.maxSkill.Name"),
+    hint: game.i18n.localize("SWFFG.Settings.maxSkill.Hint"),
+    scope: "world",
+    config: false,
+    default: 6,
+    type: Number,
+  });
+
+  /**
    * Register compendiums for sources for purchasing
    */
-  game.settings.register("starwarsffg", "specializationCompendiums", {
+  game.settings.register("genesysk2", "specializationCompendiums", {
     name: game.i18n.localize("SWFFG.Settings.Purchase.Specialization.Name"),
     hint: game.i18n.localize("SWFFG.Settings.Purchase.Specialization.Hint"),
     scope: "world",
-    config: true,
-    default: "world.oggdudespecializations",
+    config: false,
+    default: "genesysk2.oggdudespecializations",
     type: String,
   });
-  game.settings.register("starwarsffg", "signatureAbilityCompendiums", {
+  game.settings.register("genesysk2", "signatureAbilityCompendiums", {
     name: game.i18n.localize("SWFFG.Settings.Purchase.SignatureAbility.Name"),
     hint: game.i18n.localize("SWFFG.Settings.Purchase.SignatureAbility.Hint"),
     scope: "world",
-    config: true,
-    default: "world.oggdudesignatureabilities",
+    config: false,
+    default: "genesysk2.oggdudesignatureabilities",
     type: String,
   });
-  game.settings.register("starwarsffg", "forcePowerCompendiums", {
+  game.settings.register("genesysk2", "forcePowerCompendiums", {
     name: game.i18n.localize("SWFFG.Settings.Purchase.ForcePower.Name"),
     hint: game.i18n.localize("SWFFG.Settings.Purchase.ForcePower.Hint"),
     scope: "world",
-    config: true,
-    default: "world.oggdudeforcepowers",
+    config: false,
+    default: "genesysk2.oggdudeforcepowers",
     type: String,
   });
-  game.settings.register("starwarsffg", "talentCompendiums", {
+  game.settings.register("genesysk2", "talentCompendiums", {
     name: game.i18n.localize("SWFFG.Settings.Purchase.Talent.Name"),
     hint: game.i18n.localize("SWFFG.Settings.Purchase.Talent.Hint"),
     scope: "world",
-    config: true,
+    config: false,
     default: "",
     type: String,
+  });
+  game.settings.register("genesysk2", "useDefense", {
+    name: game.i18n.localize("SWFFG.Settings.UseDefense.Name"),
+    hint: game.i18n.localize("SWFFG.Settings.UseDefense.Hint"),
+    scope: "client",
+    config: false,
+    default: true,
+    type: Boolean,
+  });
+
+  /**
+   * Register a setting to avoid spamming compendium warnings for Genesys players or whomever
+   */
+  game.settings.register("genesysk2", "compendiumsPreviouslyEmpty", {
+    scope: "world",
+    config: false,
+    default: false,
+    type: Boolean,
   });
 
   /**
@@ -221,7 +294,7 @@ Hooks.once("init", async function () {
     name: game.i18n.localize("SWFFG.InitiativeMode"),
     hint: game.i18n.localize("SWFFG.InitiativeModeHint"),
     scope: "world",
-    config: true,
+    config: false,
     default: "v",
     type: String,
     choices: {
@@ -305,7 +378,7 @@ Hooks.once("init", async function () {
         name: game.i18n.localize("SWFFG.SettingsSkillTheme"),
         hint: game.i18n.localize("SWFFG.SettingsSkillThemeHint"),
         scope: "world",
-        config: true,
+        config: false,
         default: "starwars",
         type: String,
         onChange: SettingsHelpers.debouncedReload,
@@ -375,9 +448,7 @@ Hooks.once("init", async function () {
     Hooks.on("preCreateCombatant", async (combatant, context, options, combatantId) => {
       await game.combat.handleCombatantAddition(combatant, context, options, combatantId);
     });
-    Hooks.on("preDeleteCombatant", async (combatant, options, unknownId) => {
-      await game.combat.handleCombatantRemoval(combatant, options, unknownId);
-    });
+    CONFIG.FFG.preCombatDelete = Hooks.on("preDeleteCombatant", registerHandleCombatantRemoval);
   }
 
   await gameSkillsList();
@@ -393,11 +464,21 @@ Hooks.once("init", async function () {
   Actors.registerSheet("ffg", AdversarySheetFFG, { types: ["character"], label: "Adversary Sheet v1" });
   Actors.registerSheet("ffg", AdversarySheetFFGV2, { types: ["character"], label: "Adversary Sheet v2" });
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ffg", ItemSheetFFG, { makeDefault: true, label: "Item Sheet v1" });
-  Items.registerSheet("ffg", ItemSheetFFGV2, { label: "Item Sheet v2" });
+  Items.registerSheet("ffg", ItemSheetFFG, { label: "Item Sheet v1" });
+  Items.registerSheet("ffg", ItemSheetFFGV2, { makeDefault: true, label: "Item Sheet v2" });
 
   // Add utilities to the global scope, this can be useful for macro makers
   window.DicePoolFFG = DicePoolFFG;
+
+  // add back in the select helper (under a new name, so we don't get warnings)
+  Handlebars.registerHelper({
+    selectFfg: function (selected, options) {
+      const escapedValue = RegExp.escape(Handlebars.escapeExpression(selected));
+      const rgx = new RegExp(' value=[\"\']' + escapedValue + '[\"\']');
+      const html = options.fn(this);
+      return html.replace(rgx, "$& selected");
+    }
+  });
 
   // Register Handlebars utilities
   Handlebars.registerHelper("json", JSON.stringify);
@@ -494,7 +575,9 @@ Hooks.once("init", async function () {
   });
 
   Handlebars.registerHelper("ffgDiceSymbols", function (text) {
-    return PopoutEditor.renderDiceImages(text);
+    //return PopoutEditor.renderDiceImages(text);
+    CONFIG.logger.warn("This function is no longer needed and should not be called. Please notify the devs if you see this message.");
+    return text;
   });
 
   Handlebars.registerHelper("object", function ({ hash }) {
@@ -515,10 +598,10 @@ Hooks.once("init", async function () {
             result += options.fn({item: list[i]});
 
     return result.length > 0 ? result : options.inverse();
-});
+  });
 
 
-  TemplateHelpers.preload();
+  await TemplateHelpers.preload();
 });
 
 Hooks.on("renderSidebarTab", (app, html, data) => {
@@ -556,23 +639,29 @@ Hooks.on("renderActorDirectory", (app, html, data) => {
 Hooks.on("renderCompendiumDirectory", (app, html, data) => {
   if (game.user.isGM) {
     const div = $(`<div class="og-character-import"></div>`);
-    const divider = $("<hr><h4>OggDude Import</h4>");
-    const datasetImportButton = $('<button class="og-character">Dataset Importer</button>');
-    div.append(divider, datasetImportButton);
+    const divider = $("<hr><h4>Importers</h4>");
+    const datasetImportButton = $('<button class="og-character">OggDude Dataset Importer</button>');
+    const datasetImportButton2 = $('<button class="swa-character">Adversaries Dataset Importer</button>');
 
+    div.append(divider, datasetImportButton, datasetImportButton2);
     html.find(".directory-footer").append(div);
 
     html.find(".og-character").click(async (event) => {
       event.preventDefault();
       new DataImporter().render(true);
     });
+
+    html.find(".swa-character").click(async (event) => {
+      event.preventDefault();
+      new SWAImporter().render(true);
+    });
   }
 });
 
 // Update chat messages with dice images
-Hooks.on("renderChatMessage", (app, html, messageData) => {
+Hooks.on("renderChatMessage", async (app, html, messageData) => {
   const content = html.find(".message-content");
-  content[0].innerHTML = PopoutEditor.renderDiceImages(content[0].innerHTML);
+  content[0].innerHTML = await PopoutEditor.renderDiceImages(content[0].innerHTML);
 
   html.on("click", ".ffg-pool-to-player", () => {
     const poolData = messageData.message.flags.genesysk2;
@@ -582,13 +671,32 @@ Hooks.on("renderChatMessage", (app, html, messageData) => {
     DiceHelpers.displayRollDialog(poolData.roll.data, dicePool, poolData.description, poolData.roll.skillName, poolData.roll.item, poolData.roll.flavor, poolData.roll.sound);
   });
 
-  html.find(".item-display .item-pill, .item-properties .item-pill").on("click", async (event) => {
+  // collapse / expand item details
+  html.find(".genesysk2.item-card .summary").on("click", async (event) => {
+    event.preventDefault();
+    const li = $(event.currentTarget);
+    const details = li.parent().children(".collapsible-content");
+    const collapseButton = li.children(".collapse-toggle");
+    // Toggle summary
+    if (li.hasClass("expanded")) {
+      details.slideUp(200, () => details.hide());
+    } else {
+      details.show();
+      details.slideDown(200);
+    }
+    li.toggleClass("expanded");
+    collapseButton.toggleClass("fa-chevron-down");
+    collapseButton.toggleClass("fa-chevron-left");
+  });
+
+  html.find(".item-display .item-pill, .item-properties .item-pill, .tag .item-pill").on("click", async (event) => {
     event.preventDefault();
     event.stopPropagation();
     const li = $(event.currentTarget);
     const itemType = li.attr("data-item-embed-type");
     let itemData = {};
     const newEmbed = li.attr("data-item-embed");
+    console.log(newEmbed)
 
     if (newEmbed === "true" && itemType === "itemmodifier") {
       itemData = {
@@ -601,8 +709,11 @@ Hooks.on("renderChatMessage", (app, html, messageData) => {
           rank: li.attr('data-item-embed-rank'),
           rank_current: li.attr('data-item-embed-rank'),
         },
+        ownership: {
+          default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER,
+        }
       };
-      const tempItem = await Item.create(itemData, {temporary: true});
+      const tempItem = await new Item(itemData, {temporary: true});
       tempItem.sheet.render(true);
     } else {
       CONFIG.logger.debug(`Unknown item type: ${itemType}, or lacking new embed system`);
@@ -920,21 +1031,43 @@ Hooks.once("ready", async () => {
     Hooks.call(`closeAssociatedTalent_${item.object._id}`, item);
   });
 
-  Hooks.on("createItem", (item, options, userId) => {
+  Hooks.on("createItem", async (item, options, userId) => {
     // add talents from species to character
     if (item.isEmbedded && item.parent.documentName === "Actor") {
       const actor = item.actor
       if (item.type === "species" && actor.type === "character") {
         const toAdd = [];
+        // talents
         for(const talentId of Object.keys(item.system.talents)) {
           const talentUuid = item.system.talents[talentId].source;
-          const talent = fromUuidSync(talentUuid);
+          const talent = await fromUuid(talentUuid);
           if (talent) {
             toAdd.push(talent);
           }
         }
+        // abilities
+        for(const abilityId of Object.keys(item.system.abilities)) {
+          const abilityData = item.system.abilities[abilityId];
+          const abilityItem = await new Item(
+            {
+              name: abilityData.name,
+              type: "ability",
+              system: {
+                description: abilityData.system.description,
+              }
+            },
+            {
+              temporary: true,
+            },
+          );
+          toAdd.push(abilityItem);
+        }
         if (toAdd.length > 0) {
-          actor.createEmbeddedDocuments("Item", toAdd);
+          const created = await actor.createEmbeddedDocuments("Item", toAdd);
+          created.forEach(created_item => {
+            // mark the items as coming from a species
+            created_item.update({flags: {genesysk2: {fromSpecies: true}}});
+          });
         }
       }
     }
@@ -1002,7 +1135,7 @@ Hooks.once("ready", async () => {
 
   if (game.settings.get("genesysk2", "useGenericSlots")) {
 
-    game.socket.on("system.starwarsffg", async (...args) => {
+    game.socket.on("system.genesysk2", async (...args) => {
       const event_type = args[0].event;
       if (game.user.id === game.users.activeGM?.id) {
         if (event_type === "combat") {
@@ -1037,19 +1170,18 @@ Hooks.once("ready", async () => {
     return token;
   });
 
-  // modification de la façon d'appeler la magie XXXX
-  //game.settings.set("genesysk2","codeSkill") //= ["SWFFG","K2G","RTG","CRU",]
-  let tabNameSkillGame = ['starwars','k2genesys','roguetrader','genesys','android', 'terrinoth', 'crucible']
-  //let tabCodeSkillGame = ['SWFFG', 'k2G','RTG','GNS','ANDR','TRG','CRU'] //the code Name
-  let tabCodeSkillGame = ['SWFFG', 'K2G','RTG','SWFFG','SWFFG','SWFFG','SWFFG'] //the code Name
-  let poscode = tabNameSkillGame.indexOf(game.settings.get("genesysk2", "skilltheme"))
-  let codeSkill = tabCodeSkillGame[poscode]
-  game.settings.set("genesysk2","codeSkill", codeSkill)
-  // copie des chose comme la magie --- c'est moche mais ça marche pas ! Portée dans la fiche
-  // game.i18n.translations.SWFFG.ForcePool = game.i18n.translations[codeSkill].ForcePool
-  // game.i18n.translations.SWFFG.ForcePoolCommitted = game.i18n.translations[codeSkill].ForcePoolCommitted
-  // game.i18n.translations.SWFFG.ForcePoolAvailable = game.i18n.translations[codeSkill].ForcePoolAvailable
-
+  const empty = await compendiumsEmpty();
+  if (empty && !game.settings.get("genesysk2", "compendiumsPreviouslyEmpty")) {
+    const template = "systems/genesysk2/templates/notifications/empty_compendiums.html";
+    const html = await renderTemplate(template);
+    const messageData = {
+      user: game.user.id,
+      type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+      content: html,
+    };
+    ChatMessage.create(messageData);
+    await game.settings.set("genesysk2", "compendiumsPreviouslyEmpty", true);
+  }
 });
 
 Hooks.once("diceSoNiceReady", (dice3d) => {
@@ -1287,18 +1419,6 @@ Hooks.on("pauseGame", () => {
 async function registerCrewRoles() {
   const defaultArrayCrewRoles = [
     {
-      "role_name":  game.i18n.localize("SWFFG.Crew.Roles.None"),
-      "role_skill": undefined,
-      "use_weapons": false,
-      "use_handling": false
-    },
-    {
-      "role_name":  game.i18n.localize("SWFFG.Crew.Roles.Pilot_Space"),
-      "role_skill":  game.i18n.localize("SWFFG.SkillsNamePilotingSpace").replace(' ', ' '),
-      "use_weapons": false,
-      "use_handling": true
-    },
-    {
       "role_name":  game.i18n.localize("SWFFG.Crew.Roles.Gunner.Name"),
       "role_skill":  game.i18n.localize("SWFFG.SkillsNameGunnery"),
       "use_weapons": true,
@@ -1336,4 +1456,19 @@ async function registerCrewRoles() {
     config: false,
     type: Object,
   });
+}
+
+/**
+ * Check if all built-in compendiums are empty or not
+ * @returns {Promise<boolean>}
+ */
+async function compendiumsEmpty() {
+  const compendiums = game.packs.contents.filter(i => i.collection.includes("starwars"));
+  for (const compendium of compendiums) {
+    if ((await compendium.getDocuments()).length !== 0) {
+      return false;
+    }
+  }
+
+  return compendiums.length > 0;
 }

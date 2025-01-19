@@ -73,18 +73,30 @@ export default class Vehicles {
                   value: item.HP ? parseInt(item.HP, 10) : 0,
                 },
                 hyperdrive: {
-                  value: item.HyperdrivePrimary ? parseInt(item.HyperdrivePrimary, 10) : 1,
+                  value: parseInt(item.HyperdrivePrimary, 10) > 0 ? parseInt(item.HyperdrivePrimary, 10) : null,
+                  backup: parseInt(item.HyperdriveBackup, 10) > 0 ? parseInt(item.HyperdriveBackup, 10) : null,
                 },
                 consumables: {
                   value: 1,
                   duration: "months",
                 },
+                navicomputer: {
+                  value: item.NaviComputer,
+                }
               },
               itemmodifier: [],
               itemattachment: [],
+              metadata: {
+                tags: [
+                  "vehicle",
+                ],
+                sources: ImportHelpers.getSourcesAsArray(item?.Sources ?? item?.Source),
+              },
+              spaceShip: isSpaceVehicle,
+              silhouetteImage: "systems/starwarsffg/images/shipdefence.png",
             };
 
-            data.system.biography += ImportHelpers.getSources(item?.Sources ?? item?.Source);
+            //data.system.biography += ImportHelpers.getSources(item?.Sources ?? item?.Source);
 
             if (item.VehicleWeapons?.VehicleWeapon) {
               if (!Array.isArray(item.VehicleWeapons.VehicleWeapon)) {
@@ -117,6 +129,33 @@ export default class Vehicles {
                   CONFIG.logger.warn(`Unable to find weapon : ${weapon.Key}`);
                 }
               });
+            }
+
+            // populate tags
+            try {
+              if (Array.isArray(item.Categories.Category)) {
+                for (const tag of item.Categories.Category) {
+                  data.system.metadata.tags.push(tag.toLowerCase());
+                }
+              } else {
+                data.system.metadata.tags.push(item.Categories.Category.toLowerCase());
+              }
+            } catch (err) {
+              CONFIG.logger.debug(`No categories found for item ${item.Key}`);
+            }
+            if (item?.Type) {
+              // the "type" can be useful as a tag as well
+              data.system.metadata.tags.push(item.Type.toLowerCase());
+            }
+
+            let imgPath = await ImportHelpers.getImageFilename(zip, "Vehicle", "", data.flags.starwarsffg.ffgimportid);
+            if (imgPath) {
+              data.img = await ImportHelpers.importImage(imgPath.name, zip, pack);
+            }
+
+            let silhouettePath = await ImportHelpers.getImageFilename(zip, "Vehicle", "", data.flags.starwarsffg.ffgimportid, "Silhouettes");
+            if (silhouettePath) {
+              data.data.silhouetteImage = await ImportHelpers.importSilhouetteImage(silhouettePath.name, zip, pack);
             }
 
             await ImportHelpers.addImportItemToCompendium("Actor", data, pack);

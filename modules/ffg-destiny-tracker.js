@@ -21,7 +21,7 @@ export default class DestinyTracker extends FormApplication {
 
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       id: "destiny-tracker",
       classes: ["genesysk2"],
       title: "Destiny Tracker",
@@ -40,8 +40,8 @@ export default class DestinyTracker extends FormApplication {
 
     this.position.left = x - 505;
     this.position.top = y;
-    this.position.width = 150;
-    this.position.height = 105;
+    //this.position.width = 150;
+    //this.position.height = 105;
 
     // filter menu based on role.
 
@@ -53,6 +53,7 @@ export default class DestinyTracker extends FormApplication {
       destinyPoolLabel,
       isGM: game.user.isGM,
       menu,
+      theme: game.settings.get("starwarsffg", "dicetheme"),
     };
   }
 
@@ -62,13 +63,7 @@ export default class DestinyTracker extends FormApplication {
   _updateObject(event, formData) {};
 
   /** @override */
-  async close(options = {}) {
-    let menu = $("#menu");
-    if (menu.length === 0) {
-      menu = new MainMenu();
-    }
-      menu.toggle();
-  };
+  async close(options = {}) {};
 
   /** @override */
   activateListeners(html) {
@@ -141,9 +136,9 @@ export default class DestinyTracker extends FormApplication {
           }
 
           messageText = `<div class="destiny-flip ${flipType}">
-          <div class="destiny-title">${game.i18n.localize("SWFFG.DestinyFlipMessage")}: <span>${typeName}</span></div>
-          <div class="destiny-left">${game.i18n.localize(game.settings.get("genesysk2", "destiny-pool-dark"))} ${game.i18n.localize("SWFFG.DestinyFlipRemaining")}: ${pool.dark}</div>
-          <div class="destiny-left">${game.i18n.localize(game.settings.get("genesysk2", "destiny-pool-light"))} ${game.i18n.localize("SWFFG.DestinyFlipRemaining")}: ${pool.light}</div>
+          <div class="destiny-title">${game.i18n.localize("SWFFG.DestinyFlipMessage")}: <span class="${typeName}">${typeName}</span></div>
+          <div class="destiny-left ${flipType !== "dPoolDark"} dark">${game.i18n.localize(game.settings.get("genesysk2", "destiny-pool-dark"))} ${game.i18n.localize("SWFFG.DestinyFlipRemaining")}: ${pool.dark}</div>
+          <div class="destiny-left ${flipType !== "dPoolLight"} light">${game.i18n.localize(game.settings.get("genesysk2", "destiny-pool-light"))} ${game.i18n.localize("SWFFG.DestinyFlipRemaining")}: ${pool.light}</div>
           </div>`;
         }
       } else if (add) {
@@ -266,7 +261,7 @@ export default class DestinyTracker extends FormApplication {
     }
 
     if (game.user.isGM) {
-      const roll = this._rollDestiny();
+      const roll = await this._rollDestiny();
 
       const light = await game.settings.get("genesysk2", "dPoolLight");
       const dark = await game.settings.get("genesysk2", "dPoolDark");
@@ -305,13 +300,13 @@ export default class DestinyTracker extends FormApplication {
     this.isRunningQueue = false;
   }
 
-  _rollDestiny() {
+  async _rollDestiny() {
     const pool = new DicePoolFFG({
       force: 1,
     });
 
     const roll = new game.ffg.RollFFG(pool.renderDiceExpression());
-    roll.toMessage({
+    await roll.toMessage({
       user: game.user.id,
       flavor: `${game.i18n.localize("SWFFG.Rolling")} ${game.i18n.localize("SWFFG.DestinyPool")}...`,
     });

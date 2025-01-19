@@ -1,41 +1,30 @@
-export default class UISettings extends FormApplication {
-  /** @override */
-  static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      id: "data-importer",
-      classes: ["genesysk2", "data-import"],
-      title: `${game.i18n.localize("SWFFG.UISettingsLabel")}`,
-      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
-    });
+class ffgSettings extends FormApplication {
+  activateListeners(html) {
+    super.activateListeners(html);
+    html.find("button.filepicker").click(this._onFilePicker.bind(this));
   }
 
-  getData(options) {
-    const gs = game.settings;
+  getData(acceptableSettings) {
     const canConfigure = game.user.can("SETTINGS_MODIFY");
+    let includeSettings = [];
+    for (const setting of game.settings.settings) {
+      if (acceptableSettings.includes(setting[0])) {
+        const s = foundry.utils.duplicate(setting[1]);
+        s.name = game.i18n.localize(s.name);
+        s.hint = game.i18n.localize(s.hint);
+        s.value = game.settings.get(s.namespace, s.key);
+        s.type = setting.type instanceof Function ? setting.type.name : "String";
+        s.isCheckbox = setting[1].type === Boolean;
+        s.isSelect = s.choices !== undefined;
+        s.isRange = setting[1].type === Number && s.range;
+        s.isFilePicker = setting.valueType === "FilePicker";
+        includeSettings.push(s);
+      }
+    }
 
     const data = {
-      system: { title: game.system.title, menus: [], settings: [] },
+      system: {title: game.system.title, menus: [], settings: includeSettings},
     };
-
-    // Classify all settings
-    for (let setting of gs.settings.values()) {
-      // Exclude settings the user cannot change
-      if (!setting.key.includes("ui-") || (!canConfigure && setting.scope !== "client")) continue;
-
-      // Update setting data
-      const s = duplicate(setting);
-      s.name = game.i18n.localize(s.name);
-      s.hint = game.i18n.localize(s.hint);
-      s.value = game.settings.get(s.namespace, s.key);
-      s.type = setting.type instanceof Function ? setting.type.name : "String";
-      s.isCheckbox = setting.type === Boolean;
-      s.isSelect = s.choices !== undefined;
-      s.isRange = setting.type === Number && s.range;
-      s.isFilePicker = setting.valueType === "FilePicker";
-
-      // Classify setting
-      if (s.namespace === game.system.id && s.key.includes("ui-")) data.system.settings.push(s);
-    }
 
     // Return data
     return {
@@ -45,48 +34,6 @@ export default class UISettings extends FormApplication {
       data: data,
     };
   }
-
-  activateListeners(html) {
-    super.activateListeners(html);
-    html.find(".submenu button").click(this._onClickSubmenu.bind(this));
-    html.find('button[name="reset"]').click(this._onResetDefaults.bind(this));
-    html.find("button.filepicker").click(this._onFilePicker.bind(this));
-  }
-
-  /**
-   * Handle activating the button to configure User Role permissions
-   * @param event {Event}   The initial button click event
-   * @private
-   */
-  _onClickSubmenu(event) {
-    event.preventDefault();
-    const menu = game.settings.menus.get(event.currentTarget.dataset.key);
-    if (!menu) return ui.notifications.error("No submenu found for the provided key");
-    const app = new menu.type();
-    return app.render(true);
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Handle button click to reset default settings
-   * @param event {Event}   The initial button click event
-   * @private
-   */
-  _onResetDefaults(event) {
-    event.preventDefault();
-    const button = event.currentTarget;
-    const form = button.form;
-    for (let [k, v] of game.settings.settings.entries()) {
-      if (v.config) {
-        let input = form[k];
-        if (input.type === "checkbox") input.checked = v.default;
-        else if (input) input.value = v.default;
-      }
-    }
-  }
-
-  /* -------------------------------------------- */
 
   _onFilePicker(event) {
     event.preventDefault();
@@ -103,16 +50,164 @@ export default class UISettings extends FormApplication {
     return fp.browse();
   }
 
-  /* -------------------------------------------- */
-
-  /** @override */
+    /** @override */
   async _updateObject(event, formData) {
-    for (let [k, v] of Object.entries(flattenObject(formData))) {
+    for (let [k, v] of Object.entries(foundry.utils.flattenObject(formData))) {
       let s = game.settings.settings.get(k);
       let current = game.settings.get(s.namespace, s.key);
       if (v !== current) {
         await game.settings.set(s.namespace, s.key, v);
       }
     }
+  }
+}
+
+export class rulesetSettings extends ffgSettings {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "ruleset-settings",
+      classes: ["genesysk2", "ruleset-settings"],
+      title: `${game.i18n.localize("SWFFG.Settings.ruleset.Title")}`,
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
+    });
+  }
+
+  getData(options) {
+    const includeSettingsNames = [
+        "genesysk2.dicetheme",
+        "genesysk2.vehicleRangeBand",
+        "genesysk2.skilltheme",
+        "genesysk2.enableForceDie",
+    ];
+    return super.getData(includeSettingsNames);
+  }
+}
+
+export class uiSettings extends ffgSettings {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "ui-settings",
+      classes: ["genesysk2", "ui-settings"],
+      title: `${game.i18n.localize("SWFFG.Settings.ui.Title")}`,
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
+    });
+  }
+
+  getData(options) {
+    const includeSettingsNames = [
+      "genesysk2.ui-uitheme",
+      "genesysk2.ui-pausedImage",
+    ];
+    return super.getData(includeSettingsNames);
+  }
+}
+
+export class combatSettings extends ffgSettings {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "combat-settings",
+      classes: ["genesysk2", "combat-settings"],
+      title: `${game.i18n.localize("SWFFG.Settings.combat.Title")}`,
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
+    });
+  }
+
+  getData(options) {
+    const includeSettingsNames = [
+      "genesysk2.useGenericSlots",
+      "genesysk2.initiativeRule",
+      "genesysk2.removeCombatantAction",
+      "genesysk2.useDefense",
+    ];
+    return super.getData(includeSettingsNames);
+  }
+}
+
+export class actorSettings extends ffgSettings {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "actor-settings",
+      classes: ["genesysk2", "actor-settings"],
+      title: `${game.i18n.localize("SWFFG.Settings.actor.Title")}`,
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
+    });
+  }
+
+  getData(options) {
+    const includeSettingsNames = [
+      "genesysk2.enableSoakCalc",
+      "genesysk2.talentSorting",
+      "genesysk2.showMinionCount",
+      "genesysk2.showAdversaryCount",
+      "genesysk2.adversaryItemName",
+      "genesysk2.maxAttribute",
+      "genesysk2.maxSkill",
+      "genesysk2.medItemName",
+      "genesysk2.HealingItemAction",
+      "genesysk2.RivalTokenPrepend",
+    ];
+    return super.getData(includeSettingsNames);
+  }
+}
+
+export class xpSpendingSettings extends ffgSettings {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "xpSpending",
+      classes: ["genesysk2", "xpSpending"],
+      title: `${game.i18n.localize("SWFFG.Settings.xpSpending.Title")}`,
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
+    });
+  }
+
+  getData(options) {
+    const includeSettingsNames = [
+      "genesysk2.specializationCompendiums",
+      "genesysk2.signatureAbilityCompendiums",
+      "genesysk2.forcePowerCompendiums",
+      "genesysk2.talentCompendiums",
+      "genesysk2.notifyOnXpSpend",
+    ];
+    return super.getData(includeSettingsNames);
+  }
+}
+
+export class localizationSettings extends ffgSettings {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "localization",
+      classes: ["genesysk2", "localization"],
+      title: `${game.i18n.localize("SWFFG.Settings.localization.Title")}`,
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
+    });
+  }
+
+  getData(options) {
+    const includeSettingsNames = [
+      "genesysk2.skillSorting",
+      "genesysk2.destiny-pool-light",
+      "genesysk2.destiny-pool-dark",
+    ];
+    return super.getData(includeSettingsNames);
+  }
+}
+
+export class groupManagerSettings extends ffgSettings {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "group-manager",
+      classes: ["genesysk2", "group-manager"],
+      title: `${game.i18n.localize("SWFFG.Settings.groupManager.Title")}`,
+      template: "systems/genesysk2/templates/dialogs/ffg-ui-settings.html",
+    });
+  }
+
+  getData(options) {
+    const includeSettingsNames = [
+      "genesysk2.pcListMode",
+      "genesysk2.privateTriggers",
+      "genesysk2.GMCharactersInGroupManager"
+    ];
+    return super.getData(includeSettingsNames);
   }
 }

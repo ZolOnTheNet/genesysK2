@@ -7,19 +7,14 @@ export class ActorSheetFFGV2 extends ActorSheetFFG {
 
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      classes: ["genesysk2", "sheet", "actor", "v2"],
-      template: "systems/genesysk2/templates/actors/ffg-character-sheet.html",
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      classes: ["starwarsffg", "sheet", "actor", "v2"],
+      template: "systems/starwarsffg/templates/actors/ffg-character-sheet.html",
       width: 710,
       height: 650,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "characteristics" }],
       scrollY: [".tableWithHeader", ".tab", ".skillsGrid", ".skillsTablesGrid"],
     });
-  }
-
-  getData() {
-    const data = super.getData();
-    return data;
   }
 
   /** @override */

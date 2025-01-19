@@ -37,6 +37,12 @@ export default class ForcePowers {
                 description: basepower.Description,
                 upgrades: {},
                 required_force_rating: item?.MinForceRating ? item.MinForceRating : 1,
+                metadata: {
+                  tags: [
+                      "forcepower",
+                  ],
+                  sources: ImportHelpers.getSourcesAsArray(item?.Sources ?? item?.Source),
+                },
               };
 
               try {
@@ -45,9 +51,9 @@ export default class ForcePowers {
                 data.data.base_cost = 0;
               }
 
-              data.data.description += ImportHelpers.getSources(item?.Sources ?? item?.Source);
-              if (item?.DieModifiers) {
-                const dieModifiers = await ImportHelpers.processDieMod(item.DieModifiers);
+              //data.data.description += ImportHelpers.getSources(item?.Sources ?? item?.Source);
+              if (basepower?.DieModifiers) {
+                const dieModifiers = await ImportHelpers.processDieMod(basepower.DieModifiers);
                 data.data.attributes = mergeObject(data.data.attributes, dieModifiers.attributes);
               }
 
@@ -115,7 +121,7 @@ export default class ForcePowers {
 
                       if (rowAbilityData?.DieModifiers) {
                         const dieModifiers = await ImportHelpers.processDieMod(rowAbilityData.DieModifiers);
-                        rowAbility.attributes = mergeObject(rowAbility.attributes, dieModifiers.attributes);
+                        rowAbility.attributes = foundry.utils.mergeObject(rowAbility.attributes, dieModifiers.attributes);
                       }
 
                       const talentKey = `upgrade${(i - 1) * 4 + index}`;
@@ -138,6 +144,23 @@ export default class ForcePowers {
                     data.data.upgrades[talentKey] = rowAbility;
                   }
                 }
+              }
+
+              // populate tags
+              try {
+                if (Array.isArray(item.Categories.Category)) {
+                  for (const tag of item.Categories.Category) {
+                    data.data.metadata.tags.push(tag.toLowerCase());
+                  }
+                } else {
+                  data.data.metadata.tags.push(item.Categories.Category.toLowerCase());
+                }
+              } catch (err) {
+                CONFIG.logger.debug(`No categories found for item ${item.Key}`);
+              }
+              if (item?.Type) {
+                // the "type" can be useful as a tag as well
+                data.data.metadata.tags.push(item.Type.toLowerCase());
               }
 
               let imgPath = await ImportHelpers.getImageFilename(zip, "ForcePowers", "", data.flags.genesysk2.ffgimportid);
